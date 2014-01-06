@@ -184,8 +184,8 @@ public class FluxVertex extends FluxElement implements TimeAwareVertex {
     }
 
 	@Override
-	public Edge addEdge(String label, Vertex out) {
-		return fluxGraph.addEdge(null, out, this, label);
+	public Edge addEdge(String label, Vertex in) {
+		return fluxGraph.addEdge(null, this, in, label);
 	}
 
 	@Override

@@ -40,6 +40,10 @@ public class FluxUtil {
         return (key.startsWith(RESERVED) || key.startsWith(":db/"));
     }
 
+    public static String getPropertyName(final Keyword property) {
+        return getPropertyName(property.toString());
+    }
+    
     // Retrieve the original name of a property
     public static String getPropertyName(final String property) {
         if (property.contains(".")) {
@@ -147,7 +151,7 @@ public class FluxUtil {
         for(List<Object> indexedAttribute : indexedAttributes) {
             String elementClazzName = elementClazz.getSimpleName();
             if (indexedAttribute.get(0).toString().endsWith("." + elementClazzName.toLowerCase())) {
-                results.add(getPropertyName((String) indexedAttribute.get(0)));
+                results.add(getPropertyName((Keyword) indexedAttribute.get(0)));
             }
         }
         return results;
