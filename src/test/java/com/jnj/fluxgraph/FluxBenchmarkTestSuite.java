@@ -12,6 +12,7 @@ public class FluxBenchmarkTestSuite extends TestSuite {
     private static final int TOTAL_RUNS = 10;
 
     public FluxBenchmarkTestSuite() {
+    	this(new FluxGraphTest());
     }
 
     public FluxBenchmarkTestSuite(final GraphTest graphTest) {

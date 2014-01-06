@@ -1,12 +1,16 @@
 package com.jnj.fluxgraph;
 
 import com.tinkerpop.blueprints.*;
+import com.tinkerpop.blueprints.util.DefaultGraphQuery;
 import com.tinkerpop.blueprints.util.ExceptionFactory;
 import com.tinkerpop.blueprints.util.StringFactory;
+
 import datomic.*;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+
+import org.apache.commons.lang.NotImplementedException;
 
 /**
  * A Blueprints implementation of a graph on top of Datomic
@@ -51,7 +55,7 @@ public class FluxGraph implements MetaGraph<Database>, KeyIndexableGraph, TimeAw
         FEATURES.supportsDuplicateEdges = true;
         FEATURES.supportsSelfLoops = true;
         FEATURES.isPersistent = false;
-        FEATURES.isRDFModel = false;
+        //FEATURES.isRDFModel = false;
         FEATURES.supportsVertexIteration = true;
         FEATURES.supportsEdgeIteration = true;
         FEATURES.supportsVertexIndex = false;
@@ -146,6 +150,8 @@ public class FluxGraph implements MetaGraph<Database>, KeyIndexableGraph, TimeAw
 
     @Override
     public TimeAwareEdge addEdge(final Object id, final Vertex outVertex, final Vertex inVertex, final String label) {
+        if (label == null || label.isEmpty()) throw new IllegalArgumentException("Label must not be null or empty.");
+
         // Create the new edge
         final FluxEdge edge = new FluxEdge(this, null);
         tx.get().add(Util.map(":db/id", edge.id,
@@ -290,9 +296,12 @@ public class FluxGraph implements MetaGraph<Database>, KeyIndexableGraph, TimeAw
     }
 
     @Override
-    public <T extends Element> void createKeyIndex(String key, Class<T> elementClass) {
+    public <T extends Element> void createKeyIndex(String key, Class<T> elementClass, Parameter... parameters) {
+        if (parameters.length > 0) throw new NotImplementedException("Don't know what to do with parameters");
+
         FluxUtil.createAttributeIndex(key, elementClass, this);
     }
+
 
     @Override
     public <T extends Element> Set<String> getIndexedKeys(Class<T> elementClass) {
@@ -484,5 +493,11 @@ public class FluxGraph implements MetaGraph<Database>, KeyIndexableGraph, TimeAw
         connection.transact(tx.get()).get();
         tx.get().clear();
     }
+
+	@Override
+	public GraphQuery query() {
+		return new DefaultGraphQuery(this);
+	}
+
 
 }

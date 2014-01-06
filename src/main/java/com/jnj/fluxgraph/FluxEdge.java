@@ -3,10 +3,13 @@ package com.jnj.fluxgraph;
 import com.tinkerpop.blueprints.*;
 import com.tinkerpop.blueprints.util.ExceptionFactory;
 import com.tinkerpop.blueprints.util.StringFactory;
+
 import datomic.Database;
 import datomic.Util;
 
 import java.util.Set;
+
+import org.apache.commons.lang.NotImplementedException;
 
 /**
  * @author Davy Suvee (http://datablend.be)
@@ -104,4 +107,8 @@ public class FluxEdge extends FluxElement implements TimeAwareEdge {
         return theFacts;
     }
 
+	@Override
+	public void remove() {
+		fluxGraph.removeEdge(this);
+	}
 }
